@@ -25,6 +25,26 @@ namespace silenium_scaper_temp
 
 			public string RowDivClass => "row-gray";
 
+			public string GameTime => "div.min";
+
+			public string FirstTeam => "div.tright";
+
+			public string SeconadTeam => "div:nth-child(4)";
+
+			public SelectorDescriptor[]  GameScore  => new[]
+			{
+				new SelectorDescriptor
+				{
+					Selector = "div.sco > a.scorelink",
+					Order = 0	 
+				},
+				new SelectorDescriptor
+				{
+					Selector = "div.sco",
+					Order = 1	 
+				}
+			};
+
 			public SelectorDescriptor[] GameDateSelector => new[]
 			{
 				new SelectorDescriptor
@@ -128,14 +148,10 @@ namespace silenium_scaper_temp
 				
 				if (divClassAttribute.Contains(scraperDataModel.RowDivClass))
 			    {	
-					gameTime = GetElementBySelector(div, "div.min");
-					firstTeam = GetElementBySelector(div, "div.tright");
-					secondTeam = GetElementBySelector(div, "div:nth-child(4)");
-					gameScore = GetElementBySelector(div, "div.sco > a.scorelink");
-					if (gameScore == null)
-					{
-						gameScore = GetElementBySelector(div, "div.sco");
-					}
+					gameTime = GetElementBySelector(div, scraperDataModel.GameTime);
+					firstTeam = GetElementBySelector(div, scraperDataModel.FirstTeam);
+					secondTeam = GetElementBySelector(div, scraperDataModel.SeconadTeam);
+					gameScore = SelectElementFromSetOfSelectors(div, scraperDataModel.GameScore);
 				}
 
 		    	Console.WriteLine("Game Country: " + gameTypeCountry?.Text);	
