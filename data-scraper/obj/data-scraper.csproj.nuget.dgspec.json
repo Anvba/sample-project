@@ -1,0 +1,71 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/andreibarbarych/Sources/test-quiz/360Sports/data-scaper/sample-project/data-scraper/data-scraper.csproj": {}
+  },
+  "projects": {
+    "/Users/andreibarbarych/Sources/test-quiz/360Sports/data-scaper/sample-project/data-scraper/data-scraper.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/andreibarbarych/Sources/test-quiz/360Sports/data-scaper/sample-project/data-scraper/data-scraper.csproj",
+        "projectName": "data-scraper",
+        "projectPath": "/Users/andreibarbarych/Sources/test-quiz/360Sports/data-scaper/sample-project/data-scraper/data-scraper.csproj",
+        "packagesPath": "/Users/andreibarbarych/.nuget/packages/",
+        "outputPath": "/Users/andreibarbarych/Sources/test-quiz/360Sports/data-scaper/sample-project/data-scraper/obj/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/andreibarbarych/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "OpenQA.Selenium.Winium": {
+              "target": "Package",
+              "version": "[1.0.0.4, )"
+            },
+            "Selenium.WebDriver.ChromeDriver": {
+              "target": "Package",
+              "version": "[88.0.4324.9600, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
