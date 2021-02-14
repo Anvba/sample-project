@@ -97,20 +97,6 @@ namespace silenium_scaper_temp
 			    {	
 					newGameDate = SelectElementFromSetOfSelectors(div, scraperDataModel.GameDateSelector);
 					
-					/*newGameDate = null; 
-					var selectedMode = scraperDataModel
-									.GameDateSelector
-									.FirstOrDefault(model => 
-									{
-										newGameDate = GetElementBySelector(div, model.Selector);
-										if (newGameDate != null &&
-											!String.IsNullOrWhiteSpace(newGameDate.Text))
-										{
-											return true;
-										}
-										return false; 
-									});*/
-
 					if (newGameDate == null)
 					{
 						continue;
@@ -119,21 +105,6 @@ namespace silenium_scaper_temp
 					gameDate = newGameDate;
 
 					newGameTypeLeague= SelectElementFromSetOfSelectors(div, scraperDataModel.GameLeagueSelector);
-					/*newGameTypeLeague = null; 
-					selectedMode = scraperDataModel
-									.GameLeagueSelector
-									.FirstOrDefault(model => 
-									{
-										newGameTypeLeague = GetElementBySelector(div, model.Selector);
-
-										if (newGameTypeLeague != null && 
-											!String.IsNullOrWhiteSpace(newGameTypeLeague.Text))
-										{
-											return true;
-										}
-
-										return false; 
-									});*/
 					
 					if (newGameTypeLeague != null)
 					{
@@ -141,22 +112,6 @@ namespace silenium_scaper_temp
 					}
 				
 					newGameTypeCountry	= SelectElementFromSetOfSelectors(div, scraperDataModel.GameContrySelector);
-
-					/*newGameTypeCountry = null; 
-					selectedMode = scraperDataModel
-									.GameContrySelector
-									.FirstOrDefault(model => 
-									{
-										newGameTypeCountry = GetElementBySelector(div, model.Selector);
-
-										if (newGameTypeCountry != null && 
-											!String.IsNullOrWhiteSpace(newGameTypeCountry.Text))
-										{
-											return true;
-										}
-
-										return false; 
-									});*/
 
 					if (newGameTypeCountry != null)
 					{	
