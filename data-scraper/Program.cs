@@ -2,7 +2,6 @@
 using System.Linq;
 using DataScraper.Model;
 using DataScraper.Extension;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 
 namespace silenium_scaper_temp
@@ -14,16 +13,9 @@ namespace silenium_scaper_temp
             Console.WriteLine("Starting test console app");
 			
 			var scraperDataModel = new ScraperDataModel();
-			var chromeOptions = new ChromeOptions();
-			chromeOptions.AddArguments("headless");
-			chromeOptions.AddArgument("--disable-javascript");
-
-			var driver = new ChromeDriver(chromeOptions);
-			driver.Navigate().GoToUrl(scraperDataModel.Url);
 			
-			//driver.Navigate().GoToUrl(@"https://www.livescores.com/soccer/spain/");
-			//driver.Navigate().GoToUrl(@"https://www.livescores.com/soccer/belgium/u21-pro-league-group-1/");
-
+			var driver = scraperDataModel.Url.GetChromeDriver();
+					
 			Console.WriteLine("Page titile " + driver.Title);
 			var contentDivs = driver.FindElements(By.CssSelector(scraperDataModel.ContentSelector));
 			
