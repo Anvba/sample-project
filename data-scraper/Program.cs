@@ -39,9 +39,9 @@ namespace silenium_scaper_temp
 
 				var divClassAttribute = div.GetAttribute("class");
 
-				if (divClassAttribute.Contains(scraperDataModel.HeadDivClass))
+				if (divClassAttribute.Contains(scraperDataModel.GameConatryAndDate.HeadDivClass))
 			    {	
-					newGameDate = div.SelectElementFromSetOfSelectors(scraperDataModel.GameDateSelector);
+					newGameDate = div.SelectElementFromSetOfSelectors(scraperDataModel.GameConatryAndDate.GameDateSelector);
 					
 					if (newGameDate == null)
 					{
@@ -50,14 +50,14 @@ namespace silenium_scaper_temp
 					
 					gameDate = newGameDate;
 
-					newGameTypeLeague= div.SelectElementFromSetOfSelectors(scraperDataModel.GameLeagueSelector);
+					newGameTypeLeague= div.SelectElementFromSetOfSelectors(scraperDataModel.GameConatryAndDate.GameLeagueSelector);
 					
 					if (newGameTypeLeague != null)
 					{
 						gameTypeLeague = newGameTypeLeague;
 					}
 				
-					newGameTypeCountry = div.SelectElementFromSetOfSelectors(scraperDataModel.GameContrySelector);
+					newGameTypeCountry = div.SelectElementFromSetOfSelectors(scraperDataModel.GameConatryAndDate.GameContrySelector);
 
 					if (newGameTypeCountry != null)
 					{	
@@ -72,12 +72,12 @@ namespace silenium_scaper_temp
 				IWebElement secondTeam = null;
 				IWebElement gameScore = null;
 				
-				if (divClassAttribute.Contains(scraperDataModel.RowDivClass))
+				if (divClassAttribute.Contains(scraperDataModel.GameData.RowDivClass))
 			    {	
-					gameTime = div.GetElementBySelector(scraperDataModel.GameTime);
-					firstTeam = div.GetElementBySelector(scraperDataModel.FirstTeam);
-					secondTeam = div.GetElementBySelector(scraperDataModel.SeconadTeam);
-					gameScore = div.SelectElementFromSetOfSelectors(scraperDataModel.GameScore);
+					gameTime = div.GetElementBySelector(scraperDataModel.GameData.GameTime);
+					firstTeam = div.GetElementBySelector(scraperDataModel.GameData.FirstTeam);
+					secondTeam = div.GetElementBySelector(scraperDataModel.GameData.SeconadTeam);
+					gameScore = div.SelectElementFromSetOfSelectors(scraperDataModel.GameData.GameScore);
 				}
 
 		    	Console.WriteLine("Game Country: " + gameTypeCountry?.Text);	
