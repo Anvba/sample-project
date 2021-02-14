@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using DataScraper.Model;
+using DataScraper.Extension;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 
@@ -40,7 +41,7 @@ namespace silenium_scaper_temp
 
 				if (divClassAttribute.Contains(scraperDataModel.HeadDivClass))
 			    {	
-					newGameDate = SelectElementFromSetOfSelectors(div, scraperDataModel.GameDateSelector);
+					newGameDate = div.SelectElementFromSetOfSelectors(scraperDataModel.GameDateSelector);
 					
 					if (newGameDate == null)
 					{
@@ -49,14 +50,14 @@ namespace silenium_scaper_temp
 					
 					gameDate = newGameDate;
 
-					newGameTypeLeague= SelectElementFromSetOfSelectors(div, scraperDataModel.GameLeagueSelector);
+					newGameTypeLeague= div.SelectElementFromSetOfSelectors(scraperDataModel.GameLeagueSelector);
 					
 					if (newGameTypeLeague != null)
 					{
 						gameTypeLeague = newGameTypeLeague;
 					}
 				
-					newGameTypeCountry	= SelectElementFromSetOfSelectors(div, scraperDataModel.GameContrySelector);
+					newGameTypeCountry = div.SelectElementFromSetOfSelectors(scraperDataModel.GameContrySelector);
 
 					if (newGameTypeCountry != null)
 					{	
@@ -73,10 +74,10 @@ namespace silenium_scaper_temp
 				
 				if (divClassAttribute.Contains(scraperDataModel.RowDivClass))
 			    {	
-					gameTime = GetElementBySelector(div, scraperDataModel.GameTime);
-					firstTeam = GetElementBySelector(div, scraperDataModel.FirstTeam);
-					secondTeam = GetElementBySelector(div, scraperDataModel.SeconadTeam);
-					gameScore = SelectElementFromSetOfSelectors(div, scraperDataModel.GameScore);
+					gameTime = div.GetElementBySelector(scraperDataModel.GameTime);
+					firstTeam = div.GetElementBySelector(scraperDataModel.FirstTeam);
+					secondTeam = div.GetElementBySelector(scraperDataModel.SeconadTeam);
+					gameScore = div.SelectElementFromSetOfSelectors(scraperDataModel.GameScore);
 				}
 
 		    	Console.WriteLine("Game Country: " + gameTypeCountry?.Text);	
@@ -91,37 +92,5 @@ namespace silenium_scaper_temp
 
 			driver.Quit();
         }
-
-		private static IWebElement GetElementBySelector(IWebElement webElement, string selector)
-		{
-				try
-				{
-					return webElement.FindElement(By.CssSelector(selector));
-				}
-				catch(Exception exc)
-				{
-					Console.WriteLine("Selection Error: " + exc.Message);
-					return null;
-				}
-		}
-
-		private static IWebElement SelectElementFromSetOfSelectors(IWebElement webElement, SelectorDescriptor[] selectors)
-		{
-				IWebElement selectedWebElement = null; 
-				var selectedMode = selectors
-								.FirstOrDefault(model => 
-								{
-									selectedWebElement = GetElementBySelector(webElement, model.Selector);
-
-									if (selectedWebElement != null && 
-										!String.IsNullOrWhiteSpace(selectedWebElement.Text))
-									{
-										return true;
-									}
-
-									return false; 
-								});
-				return selectedWebElement;
-		}
-    }
+	}
 }
