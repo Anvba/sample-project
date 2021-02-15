@@ -5,8 +5,8 @@ namespace DataScraper.Scraper
 {
 	public interface IScraper
 	{
-		public int Order { get; }
+		int Order { get; }
 		
-		public void ScrapeData(IWebElement webElement, GameData gameData);	
+		void ScrapeData(IWebElement webElement, GameData gameData);	
 	}	
 }

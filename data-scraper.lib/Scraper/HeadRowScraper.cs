@@ -28,7 +28,7 @@ namespace DataScraper.Scraper
 		{
 			var divClassAttribute = webElement.GetAttribute(DataAttribute);
 
-			if (divClassAttribute.Contains(_gameCountryAndDateDescriptor.HeadDivClass))
+			if (!divClassAttribute.Contains(_gameCountryAndDateDescriptor.HeadDivClass))
 			{	
 				FillInGameData(gameData);	
 
