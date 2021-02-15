@@ -19,14 +19,15 @@ namespace silenium_scaper_temp
 			Console.WriteLine("Page titile " + driver.Title);
 			var contentDivs = driver.FindElements(By.CssSelector(scraperDataModel.ContentSelector));
 			
-			IWebElement gameTypeCountry = null;
-			IWebElement gameTypeLeague = null;
+			IWebElement gameCountry = null;
+			IWebElement gameLeague = null;
 			IWebElement gameDate  = null;
+			GameData gameData = null;
 
 			foreach(var div in contentDivs)
 			{
-				IWebElement newGameTypeCountry = null;
-				IWebElement newGameTypeLeague = null;
+				IWebElement newGameCountry = null;
+				IWebElement newGameLeague = null;
 				IWebElement newGameDate  = null;
 
 				var divClassAttribute = div.GetAttribute("class");
@@ -42,18 +43,18 @@ namespace silenium_scaper_temp
 					
 					gameDate = newGameDate;
 
-					newGameTypeLeague= div.SelectElementFromSetOfSelectors(scraperDataModel.GameConatryAndDate.GameLeagueSelector);
+					newGameLeague= div.SelectElementFromSetOfSelectors(scraperDataModel.GameConatryAndDate.GameLeagueSelector);
 					
-					if (newGameTypeLeague != null)
+					if (newGameLeague != null)
 					{
-						gameTypeLeague = newGameTypeLeague;
+						gameLeague = newGameLeague;
 					}
 				
-					newGameTypeCountry = div.SelectElementFromSetOfSelectors(scraperDataModel.GameConatryAndDate.GameContrySelector);
+					newGameCountry = div.SelectElementFromSetOfSelectors(scraperDataModel.GameConatryAndDate.GameContrySelector);
 
-					if (newGameTypeCountry != null)
+					if (newGameCountry != null)
 					{	
-						gameTypeCountry = newGameTypeCountry;
+						gameCountry = newGameCountry;
 					}
 
 					continue;
@@ -72,8 +73,19 @@ namespace silenium_scaper_temp
 					gameScore = div.SelectElementFromSetOfSelectors(scraperDataModel.GameData.GameScore);
 				}
 
-		    	Console.WriteLine("Game Country: " + gameTypeCountry?.Text);	
-		    	Console.WriteLine("Game League: " + gameTypeLeague?.Text);	
+				gameData = new GameData
+				{
+					GameContry = gameCountry?.Text,
+					GameDate = gameDate?.Text,
+					GameLeague = gameLeague?.Text,
+					GameTime = gameTime?.Text,
+					FirstTeam = firstTeam?.Text,
+					SeconadTeam = secondTeam?.Text,
+					GameScore = gameScore?.Text
+				};
+
+		    	Console.WriteLine("Game Country: " + gameCountry?.Text);	
+		    	Console.WriteLine("Game League: " + gameLeague?.Text);	
 		    	Console.WriteLine("Game Date: " + gameDate?.Text);	
 				Console.WriteLine("Game Time: " + gameTime?.Text);
 				Console.WriteLine("Game First Team: " + firstTeam?.Text);
