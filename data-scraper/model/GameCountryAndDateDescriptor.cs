@@ -1,6 +1,6 @@
 namespace DataScraper.Model
 {
-	public class GameConatryAndDateDescriptor
+	public class GameCountryAndDateDescriptor
 	{
 		public string HeadDivClass => "row-tall";
 

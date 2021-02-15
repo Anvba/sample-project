@@ -11,6 +11,6 @@ namespace DataScraper.Model
 
 		public GameDataDescriptor GameData => new GameDataDescriptor();
 
-		public GameConatryAndDateDescriptor GameConatryAndDate => new GameConatryAndDateDescriptor();
+		public GameCountryAndDateDescriptor GameConatryAndDate => new GameCountryAndDateDescriptor();
 	}
 }

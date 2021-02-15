@@ -18,7 +18,7 @@ namespace silenium_scaper_temp
 					
 			Console.WriteLine("Page titile " + driver.Title);
 			var contentDivs = driver.FindElements(By.CssSelector(scraperDataModel.ContentSelector));
-			
+
 			IWebElement gameCountry = null;
 			IWebElement gameLeague = null;
 			IWebElement gameDate  = null;
@@ -60,11 +60,6 @@ namespace silenium_scaper_temp
 					continue;
 				}
 
-				IWebElement gameTime = null;
-				IWebElement firstTeam = null;
-				IWebElement secondTeam = null;
-				IWebElement gameScore = null;
-				
 				if (divClassAttribute.Contains(scraperDataModel.GameData.RowDivClass))
 			    {	
 					gameData = new GameData
@@ -77,7 +72,8 @@ namespace silenium_scaper_temp
 						SecondTeam = div.GetElementBySelector(scraperDataModel.GameData.SeconadTeam)?.Text,
 						GameScore = div.SelectElementFromSetOfSelectors(scraperDataModel.GameData.GameScore)?.Text
 					};
-				} else 
+				} 
+				else 
 				{
 					continue; 
 				}
