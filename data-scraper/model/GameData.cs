@@ -4,7 +4,7 @@ namespace DataScraper.Model
 	{
 		public string GameDate { get; set; }
 
-		public string GameContry { get; set; }
+		public string GameCountry { get; set; }
 
 		public string GameLeague { get; set; } 
 
@@ -12,7 +12,7 @@ namespace DataScraper.Model
 
 		public string FirstTeam { get; set; }
 
-		public string SeconadTeam { get; set; }
+		public string SecondTeam { get; set; }
 
 		public string GameScore { get; set; }
 	}

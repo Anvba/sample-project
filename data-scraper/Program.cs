@@ -67,30 +67,28 @@ namespace silenium_scaper_temp
 				
 				if (divClassAttribute.Contains(scraperDataModel.GameData.RowDivClass))
 			    {	
-					gameTime = div.GetElementBySelector(scraperDataModel.GameData.GameTime);
-					firstTeam = div.GetElementBySelector(scraperDataModel.GameData.FirstTeam);
-					secondTeam = div.GetElementBySelector(scraperDataModel.GameData.SeconadTeam);
-					gameScore = div.SelectElementFromSetOfSelectors(scraperDataModel.GameData.GameScore);
+					gameData = new GameData
+					{
+						GameCountry = gameCountry?.Text,
+						GameDate = gameDate?.Text,
+						GameLeague = gameLeague?.Text,
+						GameTime = div.GetElementBySelector(scraperDataModel.GameData.GameTime)?.Text,
+						FirstTeam = div.GetElementBySelector(scraperDataModel.GameData.FirstTeam)?.Text,
+						SecondTeam = div.GetElementBySelector(scraperDataModel.GameData.SeconadTeam)?.Text,
+						GameScore = div.SelectElementFromSetOfSelectors(scraperDataModel.GameData.GameScore)?.Text
+					};
+				} else 
+				{
+					continue; 
 				}
 
-				gameData = new GameData
-				{
-					GameContry = gameCountry?.Text,
-					GameDate = gameDate?.Text,
-					GameLeague = gameLeague?.Text,
-					GameTime = gameTime?.Text,
-					FirstTeam = firstTeam?.Text,
-					SeconadTeam = secondTeam?.Text,
-					GameScore = gameScore?.Text
-				};
-
-		    	Console.WriteLine("Game Country: " + gameCountry?.Text);	
-		    	Console.WriteLine("Game League: " + gameLeague?.Text);	
-		    	Console.WriteLine("Game Date: " + gameDate?.Text);	
-				Console.WriteLine("Game Time: " + gameTime?.Text);
-				Console.WriteLine("Game First Team: " + firstTeam?.Text);
-				Console.WriteLine("Game Second Team: " + secondTeam?.Text);
-				Console.WriteLine("Game Score: "+ gameScore?.Text);
+		    	Console.WriteLine("Game Country: " + gameData.GameCountry);	
+		    	Console.WriteLine("Game League: " + gameData.GameLeague);	
+		    	Console.WriteLine("Game Date: " + gameData.GameDate);	
+				Console.WriteLine("Game Time: " + gameData.GameTime);
+				Console.WriteLine("Game First Team: " + gameData.FirstTeam);
+				Console.WriteLine("Game Second Team: " + gameData.SecondTeam);
+				Console.WriteLine("Game Score: "+ gameData.GameScore);
 				Console.WriteLine();
 			}
 
