@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using DataScraper.Model;
 using DataScraper.Extension;
 using DataScraper.Scraper;
+using DataScraper.Logging;
 
 namespace DataScraper.WebResourceConsumer
 {
@@ -16,24 +17,27 @@ namespace DataScraper.WebResourceConsumer
 
 		private ScraperDataModel _scraperDataModel;
 
-		public WebResource(IOnDataItem onDataItem)	
+		private ILogger _logger;
+
+		public WebResource(IOnDataItem onDataItem, ILogger logger)	
 		{
 			_onDataItem = onDataItem;
+			_logger = logger;
 		}
 		
 		public void Initialize(ScraperDataModel scraperDataModel)
 		{
-            Console.WriteLine("Starting test console app");
+            _logger.LogInfo("Starting test console app");
 			
 			_scraperDataModel = scraperDataModel;
 			_webDriver = scraperDataModel.Url.GetChromeDriver();
 					
-			Console.WriteLine("Page titile " + _webDriver.Title);
+			_logger.LogInfo("Page titile " + _webDriver.Title);
 
 			_pageScraper = new PageScraper(new IScraper[]
 							{
-								new HeaderDataScraper(scraperDataModel.GameConatryAndDate),
-								new GameRowScraper(scraperDataModel.GameData)
+								new HeaderDataScraper(scraperDataModel.GameConatryAndDate, _logger),
+								new GameRowScraper(scraperDataModel.GameData, _logger)
 							});
 			
 		}

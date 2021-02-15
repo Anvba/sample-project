@@ -2,12 +2,15 @@ using System;
 using OpenQA.Selenium;
 using DataScraper.Extension;
 using DataScraper.Model;
+using DataScraper.Logging;
 
 namespace DataScraper.Scraper
 {
 	public class HeaderDataScraper : IScraper
 	{
 		public int Order => 1;
+
+		private ILogger _logger;
 
 		private const string DataAttribute = "class";
 		
@@ -19,9 +22,10 @@ namespace DataScraper.Scraper
 
 		private string _gameCountry = String.Empty;
 
-		public HeaderDataScraper(GameCountryAndDateDescriptor gameCountryAndDateDescriptor)
+		public HeaderDataScraper(GameCountryAndDateDescriptor gameCountryAndDateDescriptor, ILogger logger)
 		{
 			_gameCountryAndDateDescriptor = gameCountryAndDateDescriptor;	
+			_logger = logger;
 		}	
 
 		public void ScrapeData(IWebElement webElement, GameData gameData)
@@ -35,7 +39,7 @@ namespace DataScraper.Scraper
 				return;
 			}
 
-			var newGameDate = webElement.SelectElementFromSetOfSelectors(_gameCountryAndDateDescriptor.GameDateSelector);
+			var newGameDate = webElement.SelectElementFromSetOfSelectors(_gameCountryAndDateDescriptor.GameDateSelector, _logger);
 			
 			if (newGameDate == null)
 			{
@@ -48,14 +52,14 @@ namespace DataScraper.Scraper
 
 			_gameDate = newGameDate.Text;
 
-			var newGameLeague= webElement.SelectElementFromSetOfSelectors(_gameCountryAndDateDescriptor.GameLeagueSelector);
+			var newGameLeague= webElement.SelectElementFromSetOfSelectors(_gameCountryAndDateDescriptor.GameLeagueSelector, _logger);
 			
 			if (newGameLeague != null)
 			{
 				_gameLeague = newGameLeague.Text;
 			}
 		
-			var newGameCountry = webElement.SelectElementFromSetOfSelectors(_gameCountryAndDateDescriptor.GameContrySelector);
+			var newGameCountry = webElement.SelectElementFromSetOfSelectors(_gameCountryAndDateDescriptor.GameContrySelector, _logger);
 
 			if (newGameCountry != null)
 			{	

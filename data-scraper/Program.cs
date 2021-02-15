@@ -1,6 +1,7 @@
 ﻿using System;
 using DataScraper.Model;
 using DataScraper.WebResourceConsumer;
+using DataScraper.Logging;
 
 namespace DataScraper
 {
@@ -27,7 +28,7 @@ namespace DataScraper
 			
 			var scraperDataModel = new ScraperDataModel();
 			
-			var webResource = new WebResource(new OnDataItemImpl());
+			var webResource = new WebResource(new OnDataItemImpl(), new Logger());
 			webResource.Initialize(scraperDataModel);
 			webResource.CollectData();
         }
