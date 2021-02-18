@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+    mongo:
+        image: mongo
+        restart: always
+        ports:
+          - 27017:27017
+        environment:
+          - MONGO_INITDB_ROOT_USERNAME=root
+          - MONGO_INITDB_ROOT_PASSWORD=example
+
+    selenium-driver:
+        image: selenium/standalone-chrome
+        volumes: 
+          - /dev/shm:/dev/shm 
+
+    data-scraper:
+        image: data-scraper
+        restart: always
+        environment:
+          - rabbitmq=rabbitmq
+          - r_user=guest
+          - r_pass=guest  
+          - driver_type=remote
+          - driver_domain_name=selenium-driver
+        
+    data-scraper.publisher:
+        image: data-scraper.publisher
+        restart: always 
+        environment:
+          - rabbitmq=rabbitmq
+          - r_user=guest
+          - r_pass=guest  

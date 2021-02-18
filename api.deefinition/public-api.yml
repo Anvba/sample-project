@@ -1,0 +1,67 @@
+openapi: '3.0.2'
+info:
+  title: Public API exposed to the systems's users
+  version: '1.0'
+servers:
+  - url: https://localhost/v1
+components:
+  schemas:
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+        gameName:
+          type: string
+        dateTime:
+          type: string
+          format: date-time
+        competion:
+          type: string
+        teams:
+          type: object
+          properties:
+            first:
+              type: string
+            second:
+              type: string
+    ListOfGames:
+      type: object
+      properties:
+        games:
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/Game"
+        next:
+          type: string
+          format: url
+paths:
+  /games:
+    get:
+      description: "Returns the list of collected games in the system"
+      summary: "Selects and returns all games scraped by the time request was sent; provides navigation link"
+      response:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOfGames"
+        '401':
+          description: "User is not authorized"
+  /game/{gameId}:
+    description: "Requests the games detials by game id"
+    summary: "Returns the game's details"
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+        '401':
+          description: "User is not authorized"
+        '404':
+          description: "Do not exist"

@@ -7,6 +7,6 @@ namespace DataScraper.WebResourceConsumer
 	{	
 		void CollectData();
 
-		void Initialize(ScraperDataModel scraperDataModel);
+		void Initialize(ScraperDataModel scraperDataModel, string remoteDriverDomainName, bool driverType);
 	}
 }

@@ -1,0 +1,209 @@
+openapi: '3.0.2'
+info:
+  title: Data scrapper Admin API
+  version: '1.0'
+servers:
+  - url: https://localhost/v1
+components:
+  schemas:
+    GeneralErrors:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        login:
+          type: string
+        password:
+          type: string
+    CreatedUser:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    WebResource:
+      type: object
+      properties:
+        url:
+          type: string
+        dataSchema:
+          type: object
+          $ref: "#/components/schemas/WebResourceDataSchema"
+    CreatedWebResource:
+      type: object
+      properties:
+        id: string
+        url:
+          type: string
+        dataSchema:
+          type: object
+          $ref: "#/components/schemas/WebResourceDataSchema"
+    WebResourceDataSchema:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+          format: date-time
+        gameName:
+          type: string
+        sportType:
+          type: string
+        teams:
+          type: object
+          properties:
+            first:
+              type: string
+            second:
+              type: string
+paths:
+  /user:
+    post:
+      description: "Creates a new user with provided details"
+      summary: "Uses details in request bodyto create a new user"
+      operationId: "CreateUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '201':
+          description: "User created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedUser"
+        '401':
+          description: "User not authorized"
+        '409':
+          description: "User with the same name already exists"
+  /user/{userId}:
+    patch:
+      description: "Update regstered user"
+      summary: "Updates User details" 
+      operationId: "UpdateUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '200':
+          description: "Updated"
+        '401':
+          description: "User is not authorized"
+        '404':
+          description: "Do not exist"
+        '409':
+          description: "User already exist"
+    get:
+      description: 
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+            schema:
+              $ref: "#/components/schemas/CreatedUser"
+        '401':
+          description: "User not authorized"
+        '404':
+          description: "Do not exist"
+  /schema:
+    post:
+      description: "Regster public web resource data schema"
+      summary: "Reqister a schema data scraper will use to collect data from public web resource"
+      operationId: "CreatePublicWebResouceDataSchema"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebResource"
+      responses:
+        '201':
+          description: "Data Schema successfully created"
+        '401':
+          description: "User not authorized"
+        '409':
+          description: "Data Schema for provided web resource already registered"
+  /schema/{schemaId}:
+    patch:
+      description: "Update regstered schema"
+      summary: "Updates schema details" 
+      operationId: "UpdateSchema"
+      responses:
+        '200':
+          description: "Updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedWebResource"
+        '401':
+          description: "User is not authorized"
+        '404':
+          description: "Do not exist"
+    get:
+      description: 
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedWebResource"
+        '401':
+          description: "User not authorized"
+        '404':
+          description: "Do not exist"
+  /schedule/{schemaId}:
+    post:
+      description: "Schedule reqistered web resource for the scap"
+      summary: "Schedule registered web resource for the scpap, as a paramerter provides CRON expression to define desired scrapping schedule"
+      operationId: "ScheduleScaper"
+      responses:
+        '201':
+          description: "Scaper created"
+        '401':
+          description: "User not authorized"
+        '409':
+          description: "Scaper already exists"
+    patch:
+      description: "Update regstered scraper"
+      summary: "Updates scaper details" 
+      operationId: "UpdateScaper"
+      responses:
+        '200':
+          description: "Updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedWebResource"
+        '401':
+          description: "User is not authorized"
+        '404':
+          description: "Do not exist"
+    get:
+      description: 
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedWebResource"
+        '401':
+          description: "User not authorized"
+        '404':
+          description: "Do not exist"

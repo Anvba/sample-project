@@ -25,13 +25,21 @@ namespace DataScraper.WebResourceConsumer
 			_logger = logger;
 		}
 		
-		public void Initialize(ScraperDataModel scraperDataModel)
+		public void Initialize(ScraperDataModel scraperDataModel, string remoteDriverDomainName, bool useRemoteWebDriver = false)
 		{
             _logger.LogInfo("Starting test console app");
 			
 			_scraperDataModel = scraperDataModel;
-			_webDriver = scraperDataModel.Url.GetChromeDriver();
-					
+
+			if (!useRemoteWebDriver)
+			{
+				_webDriver = scraperDataModel.Url.GetChromeDriver();
+			}
+			else
+			{
+				_webDriver = scraperDataModel.Url.GetRemoteChromeDriver(remoteDriverDomainName);		
+			}
+
 			_logger.LogInfo("Page titile " + _webDriver.Title);
 
 			_pageScraper = new PageScraper(new IScraper[]
