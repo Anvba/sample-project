@@ -10,21 +10,62 @@ namespace DataScraper
 {
 	public class OnDataItemImpl : IOnDataItem
 	{
-		public void OnDataItem(GameData gameData)
+		private IBusControl _busControl;
+
+		private CancellationTokenSource _source;
+		
+		public async Task Initialize()
 		{
-		    Console.WriteLine("Game Country: " + gameData.GameCountry);	
-		    Console.WriteLine("Game League: " + gameData.GameLeague);	
-		    Console.WriteLine("Game Date: " + gameData.GameDate);	
-			Console.WriteLine("Game Time: " + gameData.GameTime);
-			Console.WriteLine("Game First Team: " + gameData.FirstTeam);
-			Console.WriteLine("Game Second Team: " + gameData.SecondTeam);
-			Console.WriteLine("Game Score: "+ gameData.GameScore);
-			Console.WriteLine();
+			var host = Environment.GetEnvironmentVariable("rabbitmq", EnvironmentVariableTarget.Process);
+			var rabbitUser = Environment.GetEnvironmentVariable("r_user", EnvironmentVariableTarget.Process);
+			var rabbitPass = Environment.GetEnvironmentVariable("r_pass", EnvironmentVariableTarget.Process);
+
+			Console.WriteLine("[Game Data Publisher] Rabbit MQ connecion detaisl: host: {0}, user: {1}, pass: {2}", host, rabbitUser, rabbitPass);
+
+			_busControl = Bus.Factory.CreateUsingRabbitMq(cfg => 
+			{
+				cfg.Host(host, "/", h =>
+                {
+                    h.Username(rabbitUser);
+                    h.Password(rabbitPass);
+                });
+			});
+
+			_source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+			await _busControl.StartAsync(_source.Token);
+		}
+
+		public async Task OnDataItem(GameData gameData)
+		{
+			try
+			{
+				Console.WriteLine("Game Country: " + gameData.GameCountry);	
+				Console.WriteLine("Game League: " + gameData.GameLeague);	
+				Console.WriteLine("Game Date: " + gameData.GameDate);	
+				Console.WriteLine("Game Time: " + gameData.GameTime);
+				Console.WriteLine("Game First Team: " + gameData.FirstTeam);
+				Console.WriteLine("Game Second Team: " + gameData.SecondTeam);
+				Console.WriteLine("Game Score: "+ gameData.GameScore);
+				Console.WriteLine();
+
+				await _busControl.Publish<GameData>(gameData);
+			}
+			catch(Exception exc)
+			{
+				Console.WriteLine("Error message: {0}", exc.Message);	
+			}
 		}	
+		public async Task Destroy()
+		{
+			await _busControl.StopAsync();
+		}
 	}
 
     class Program
     {
+		public static IOnDataItem OnDataItem = new OnDataItemImpl();
+
 		public static async Task Main()
         {
 			var host = Environment.GetEnvironmentVariable("rabbitmq", EnvironmentVariableTarget.Process) ?? "localhost";
@@ -32,6 +73,8 @@ namespace DataScraper
 			var rabbitPass = Environment.GetEnvironmentVariable("r_pass", EnvironmentVariableTarget.Process) ?? "guest";
 
 			Console.WriteLine("Rabbit MQ connecion detaisl: host: {0}, user: {1}, pass: {2}", host, rabbitUser, rabbitPass);
+
+			await OnDataItem.Initialize();
 
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
@@ -63,34 +106,32 @@ namespace DataScraper
             finally
             {
                 await busControl.StopAsync();
+				await Program.OnDataItem.Destroy();
             }
         }
 
         class ScraperDataModelConsumer : IConsumer<ScraperDataModel>
         {
-            public Task Consume(ConsumeContext<ScraperDataModel> context)
+            public async Task Consume(ConsumeContext<ScraperDataModel> context)
             {
-				var scraperDataModel = new ScraperDataModel();
 				var driverType = Environment.GetEnvironmentVariable("driver_type", EnvironmentVariableTarget.Process) ?? "local";
 				var remoteDriverDomainName = Environment.GetEnvironmentVariable("driver_domain_name", EnvironmentVariableTarget.Process) ?? "localhost";
-				var webResource = new WebResource(new OnDataItemImpl(), new Logger());
+				var webResource = new WebResource(Program.OnDataItem, new Logger());
 
 				if (string.Equals(driverType, "local"))
 				{
-					webResource.Initialize(scraperDataModel, remoteDriverDomainName);
+					webResource.Initialize(context.Message, remoteDriverDomainName);
 				}
 				else if (string.Equals(driverType, "remote"))
 				{
-					webResource.Initialize(scraperDataModel, remoteDriverDomainName, true);
+					webResource.Initialize(context.Message, remoteDriverDomainName, true);
 				}
 				else
 				{
 					throw new NotImplementedException("Provided Selenium Web Driver Type is not implemented");
 				}
 
-				webResource.CollectData();
-
-				return Task.CompletedTask;
+				await webResource.CollectData();
             }
         }
 	}

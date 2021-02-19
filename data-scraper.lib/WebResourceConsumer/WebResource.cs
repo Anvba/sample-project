@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using OpenQA.Selenium;
 using DataScraper.Model;
 using DataScraper.Extension;
@@ -50,7 +51,7 @@ namespace DataScraper.WebResourceConsumer
 			
 		}
 
-		public void CollectData()
+		public async Task CollectData()
 		{
 			if (_webDriver == null || _pageScraper == null)
 				throw new Exception("Instance was not initialized");
@@ -61,7 +62,7 @@ namespace DataScraper.WebResourceConsumer
 			foreach(var div in contentDivs)
 			{
 				_pageScraper.ScrapeData(div, gameData);	
-				_onDataItem.OnDataItem(gameData);
+				await _onDataItem.OnDataItem(gameData);
 			}
 		}
 		

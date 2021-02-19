@@ -1,11 +1,12 @@
 using System;
+using System.Threading.Tasks;
 using DataScraper.Model;
 
 namespace DataScraper.WebResourceConsumer
 {
 	public interface IWebResource
 	{	
-		void CollectData();
+		Task CollectData();
 
 		void Initialize(ScraperDataModel scraperDataModel, string remoteDriverDomainName, bool driverType);
 	}

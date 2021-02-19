@@ -36,3 +36,11 @@ services:
           - rabbitmq=rabbitmq
           - r_user=guest
           - r_pass=guest  
+
+    scraped-data-processor:
+        image: scraped-data-processor
+        restart: always 
+        environment:
+          - rabbitmq=rabbitmq
+          - r_user=guest
+          - r_pass=guest  

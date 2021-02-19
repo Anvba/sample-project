@@ -33,7 +33,7 @@ namespace data_scraper.publisher
 				while (true)
 				{
 					await busControl.Publish<ScraperDataModel>(new ScraperDataModel());
-					await Task.Delay(TimeSpan.FromSeconds(30));
+					await Task.Delay(TimeSpan.FromSeconds(300));
 				}
 			}
 			catch(Exception exc)

@@ -1,9 +1,14 @@
+using System.Threading.Tasks;
 using DataScraper.Model;
 
 namespace DataScraper.WebResourceConsumer
 {
 	public interface IOnDataItem
 	{
-		void OnDataItem(GameData gameData);
+		Task Initialize();
+
+		Task OnDataItem(GameData gameData);
+
+		Task Destroy();
 	}
 }
