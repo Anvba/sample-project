@@ -1,4 +1,4 @@
-openapi: '3.0.2'
+openapi: '3.0.0'
 info:
   title: Data scrapper Admin API
   version: '1.0'
@@ -10,8 +10,7 @@ components:
       type: object
       properties:
         code:
-          type: integer
-          format: int32
+          type: string
         message:
           type: string
     User:
@@ -30,43 +29,79 @@ components:
           type: string
         name:
           type: string
-    WebResource:
-      type: object
-      properties:
-        url:
-          type: string
-        dataSchema:
-          type: object
-          $ref: "#/components/schemas/WebResourceDataSchema"
     CreatedWebResource:
       type: object
       properties:
-        id: string
+        resourceId: 
+          type: string
         url:
           type: string
         dataSchema:
           type: object
-          $ref: "#/components/schemas/WebResourceDataSchema"
-    WebResourceDataSchema:
+          $ref: "#/components/schemas/WebResource"
+    WebResource:
       type: object
       properties:
-        date:
+        Url:
           type: string
-          format: date
-        time:
+        Content:
           type: string
-          format: date-time
-        gameName:
-          type: string
-        sportType:
-          type: string
-        teams:
+        GameCountryAndDate:
           type: object
-          properties:
-            first:
-              type: string
-            second:
-              type: string
+          $ref: "#/components/schemas/WebResourceItemGroup"
+        GameData:
+          type: object
+          $ref: "#/components/schemas/WebResourceItem"
+    WebResourceItemGroup:
+      type: object
+      properties:
+        HeadDivClass:
+          type: object
+          $ref: "#/components/schemas/WebResourceSelector"
+        GameDataSelector:
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/WebResourceSelectorDescriptor"
+        GameCountrySelector:
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/WebResourceSelectorDescriptor"
+        GameLeagueSelector:
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/WebResourceSelectorDescriptor"
+    WebResourceItem:
+      type: object
+      properties:
+        RowDivClass:
+          type: object
+          $ref: "#/components/schemas/WebResourceSelector"
+        GameTime:
+          type: object
+          $ref: "#/components/schemas/WebResourceSelector"
+        FirstTeam:
+          type: object
+          $ref: "#/components/schemas/WebResourceSelector"
+        SecondTeam:
+          type: object
+          $ref: "#/components/schemas/WebResourceSelector"
+        GameScore:
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/WebResourceSelectorDescriptor"
+    WebResourceSelector:
+      type: string      
+    WebResourceSelectorDescriptor:
+      type: object
+      properties:
+        selector:
+          $ref: "#/components/schemas/WebResourceSelector"
+        order:
+          type: string    
 paths:
   /user:
     post:
@@ -85,6 +120,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreatedUser"
+        '400':
+          description: "Request has errors"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralErrors"
         '401':
           description: "User not authorized"
         '409':
@@ -115,12 +156,19 @@ paths:
           description: "OK"
           content:
             application/json:
-            schema:
-              $ref: "#/components/schemas/CreatedUser"
+              schema:
+                $ref: "#/components/schemas/CreatedUser"
         '401':
           description: "User not authorized"
         '404':
           description: "Do not exist"
+    parameters:
+    - name: userId
+      in: path
+      description: "Registered User's id"
+      required: true
+      schema:
+        type: string
   /schema:
     post:
       description: "Regster public web resource data schema"
@@ -134,6 +182,12 @@ paths:
       responses:
         '201':
           description: "Data Schema successfully created"
+        '400':
+          description: "Request has errors"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralErrors"
         '401':
           description: "User not authorized"
         '409':
@@ -150,6 +204,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreatedWebResource"
+        '400':
+          description: "Request has errors"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralErrors"
         '401':
           description: "User is not authorized"
         '404':
@@ -167,6 +227,13 @@ paths:
           description: "User not authorized"
         '404':
           description: "Do not exist"
+    parameters:
+    - name: schemaId
+      in: path
+      description: "Registered Schema's id"
+      required: true
+      schema:
+        type: string
   /schedule/{schemaId}:
     post:
       description: "Schedule reqistered web resource for the scap"
@@ -175,6 +242,12 @@ paths:
       responses:
         '201':
           description: "Scaper created"
+        '400':
+          description: "Request has errors"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralErrors"
         '401':
           description: "User not authorized"
         '409':
@@ -190,6 +263,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreatedWebResource"
+        '400':
+          description: "Request has errors"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralErrors"
         '401':
           description: "User is not authorized"
         '404':
@@ -207,3 +286,10 @@ paths:
           description: "User not authorized"
         '404':
           description: "Do not exist"
+    parameters:
+    - name: schemaId
+      in: path
+      description: "Registered Schema's id" 
+      required: true
+      schema:
+        type: string

@@ -41,7 +41,7 @@ paths:
     get:
       description: "Returns the list of collected games in the system"
       summary: "Selects and returns all games scraped by the time request was sent; provides navigation link"
-      response:
+      responses:
         '200':
           description: "OK"
           content:
@@ -65,3 +65,10 @@ paths:
           description: "User is not authorized"
         '404':
           description: "Do not exist"
+    parameters:
+    - name: gameId
+      in: path
+      description: "Registered Game's id"
+      required: true
+      schema:
+        type: string

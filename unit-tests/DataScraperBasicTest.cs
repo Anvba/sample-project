@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit; 
 using DataScraper.Model; 
 using DataScraper.WebResourceConsumer; 
@@ -12,10 +13,15 @@ namespace DataScraper.UnitTests
 		
 		public class OnDataItemImpl : IOnDataItem
 		{
-			public void OnDataItem(GameData gameData)
+			public Task Initialize()
+			{
+				throw new NotImplementedException();
+			}	
+
+			public Task OnDataItem(GameData gameData)
 			{
 				if (Test_PageScraper.NotEmptyGameData != null)
-						return;
+						return Task.CompletedTask;
 
 				if (!String.IsNullOrWhiteSpace(gameData.GameCountry) &&
 					!String.IsNullOrWhiteSpace(gameData.GameLeague) &&	
@@ -36,7 +42,14 @@ namespace DataScraper.UnitTests
 						GameScore = gameData.GameScore
 					};
 				}	
+
+				return Task.CompletedTask;
 			} 
+
+			public Task Destroy()
+			{
+				throw new NotImplementedException();	
+			}
 		}
 
 		[Fact]
@@ -46,7 +59,7 @@ namespace DataScraper.UnitTests
 			var logger = new Logger();
 			var webResource = new WebResource(new OnDataItemImpl(), logger);
 
-			webResource.Initialize(scraperDataModel);
+			webResource.Initialize(scraperDataModel, null);
 			webResource.CollectData();
 
 			Assert.NotNull(Test_PageScraper.NotEmptyGameData);

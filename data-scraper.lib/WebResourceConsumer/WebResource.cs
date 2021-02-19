@@ -45,7 +45,7 @@ namespace DataScraper.WebResourceConsumer
 
 			_pageScraper = new PageScraper(new IScraper[]
 							{
-								new HeaderDataScraper(scraperDataModel.GameConatryAndDate, _logger),
+								new HeaderDataScraper(scraperDataModel.GameCountryAndDate, _logger),
 								new GameRowScraper(scraperDataModel.GameData, _logger)
 							});
 			
