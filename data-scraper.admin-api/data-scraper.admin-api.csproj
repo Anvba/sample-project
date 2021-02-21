@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\data-scraper.lib\data-scraper.lib.csproj" />
+    <ProjectReference Include="..\data-scraper.common\data-scraper.common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
