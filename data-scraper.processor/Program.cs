@@ -46,7 +46,7 @@ namespace DataScraper.Processor
 				CollectionName = "gameData"
 			});
 			serviceCollection.AddLogging(configure => configure.AddConsole());
-			serviceCollection.AddSingleton<IMongoDBRepository<GameDataModel>, MongoDBRepository<GameDataModel>>();
+			serviceCollection.AddSingleton<IMongoDBGameRepository<GameDataModel>, MongoDBGameRepository<GameDataModel>>();
 
     		ServiceProvider = serviceCollection.BuildServiceProvider();
 
@@ -57,7 +57,10 @@ namespace DataScraper.Processor
             {
                 Console.WriteLine("Press enter to exit");
 
-                await Task.Run(() => Console.ReadLine());
+				while (true)
+				{
+                	await Task.Run(() => Console.ReadLine());
+				}
             }
 			catch(Exception exc)
 			{
@@ -85,6 +88,15 @@ namespace DataScraper.Processor
 					return Task.CompletedTask;
 				}
 				
+
+				var mongoRepository  = Program.ServiceProvider.GetService<IMongoDBGameRepository<GameDataModel>>();
+				var uid = string.Format("{0}{1}{2}", context.Message.GameLeague, context.Message.FirstTeam, context.Message.SecondTeam);
+
+				if (mongoRepository.Find(uid) != null)
+				{
+					return Task.CompletedTask;
+				}
+
 				var gameDataModel = new GameDataModel
 				{
                     GameCountry = context.Message.GameCountry,
@@ -93,10 +105,11 @@ namespace DataScraper.Processor
                     GameTime = context.Message.GameTime,
                     FirstTeam = context.Message.FirstTeam,
                     SecondTeam = context.Message.SecondTeam, 				
-                    GameScore = context.Message.GameScore
+                    GameScore = context.Message.GameScore,
+					UID = uid,
+					Version = "1"
 				};
 
-				var mongoRepository  = Program.ServiceProvider.GetService<IMongoDBRepository<GameDataModel>>();
 				mongoRepository.CreateDocument(gameDataModel);
 
 				Console.WriteLine("[Scraped Data Processor] Game Id: " + gameDataModel.Id);	

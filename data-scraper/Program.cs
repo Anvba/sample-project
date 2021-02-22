@@ -97,7 +97,10 @@ namespace DataScraper
             {
                 Console.WriteLine("Press enter to exit");
 
-                await Task.Run(() => Console.ReadLine());
+				while(true)
+				{
+                	await Task.Run(() => Console.ReadLine());
+				}
             }
 			catch(Exception exc)
 			{

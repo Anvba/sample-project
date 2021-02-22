@@ -9,7 +9,7 @@ namespace DataScraper.DataAccess
 
 		private ILogger<MongoDBRepository<TModel>> _logger;
 
-		private IMongoCollection<TModel> _mongoCollection;
+		protected IMongoCollection<TModel> _mongoCollection;
 
 		public MongoDBRepository(ILogger<MongoDBRepository<TModel>> logger, IMongoDBConfig mongoDBconfig)
 		{	

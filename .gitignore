@@ -3,3 +3,4 @@
 /**/*.swp
 /infrastructure/mongo-volume/
 /infrastructure/data/
+.DS_Store
