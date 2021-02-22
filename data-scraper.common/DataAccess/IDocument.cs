@@ -1,6 +1,6 @@
 using System;
 
-namespace DataAccess.AdminAPI.DataAccess
+namespace DataScraper.DataAccess
 {
 	public interface IDocument
 	{

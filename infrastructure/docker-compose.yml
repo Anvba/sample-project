@@ -1,49 +1,119 @@
 version: "3.9"
+networks:
+   scraper_network:
+       driver: bridge
+       ipam:
+           config:
+               - subnet: "169.254.170.0/24"
+                 gateway: 169.254.170.1
 services:
-  #    rabbitmq:
-  #        image: rabbitmq:3-management
-  #        ports:
-  #            - "15672:15672"
-  #            - "5672:5672"
-    mongo:
-        image: mongo
-        restart: always
+    rabbitmq:
+        image: rabbitmq:3-management
         ports:
-          - 27017:27017
-        environment:
-          - MONGO_INITDB_ROOT_USERNAME=root
-          - MONGO_INITDB_ROOT_PASSWORD=example
-          - MONGO_INITDB_DATABASE=datascraper
-        volumes:
-          - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+            - "15672:15672"
+            - "5672:5672"
+        networks:
+            scraper_network:
+                ipv4_address: "169.254.170.10"
+    mongo1:
+      hostname: mongo1
+      container_name: localmongo1
+      image: mongo:4.0-xenial
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=example
+      expose:
+        - 27017
+      ports:
+        - 27011:27017
+      restart: always
+      entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+      networks:
+          scraper_network:
+              ipv4_address: "169.254.170.2"
+    mongo2:
+      hostname: mongo2
+      container_name: localmongo2
+      image: mongo:4.0-xenial
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=example
+      expose:
+        - 27017
+      ports:
+        - 27012:27017
+      restart: always
+      entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+      networks:
+          scraper_network:
+              ipv4_address: "169.254.170.3"
+    mongo3:
+      hostname: mongo3
+      container_name: localmongo3
+      image: mongo:4.0-xenial
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=example
+      expose:
+        - 27017
+      ports:
+        - 27013:27017
+      restart: always
+      entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+      networks:
+          scraper_network:
+              ipv4_address: "169.254.170.4"
+      
+    selenium-driver:
+        image: selenium/standalone-chrome
+        volumes: 
+          - /dev/shm:/dev/shm 
+        networks:
+            scraper_network:
+                ipv4_address: "169.254.170.5"
 
-            #    selenium-driver:
-            #        image: selenium/standalone-chrome
-            #        volumes: 
-            #          - /dev/shm:/dev/shm 
-            #
-            #    data-scraper:
-            #        image: data-scraper
-            #        restart: always
-            #        environment:
-            #          - rabbitmq=rabbitmq
-            #          - r_user=guest
-            #          - r_pass=guest  
-            #          - driver_type=remote
-            #          - driver_domain_name=selenium-driver
-            #        
-            #    data-scraper.publisher:
-            #        image: data-scraper.publisher
-            #        restart: always 
-            #        environment:
-            #          - rabbitmq=rabbitmq
-            #          - r_user=guest
-            #          - r_pass=guest  
-            #
-            #    scraped-data-processor:
-            #        image: scraped-data-processor
-            #        restart: always 
-            #        environment:
-            #          - rabbitmq=rabbitmq
-            #          - r_user=guest
-            #          - r_pass=guest  
+    data-scraper:
+        image: data-scraper
+        restart: always
+        environment:
+          - rabbitmq=rabbitmq
+          - r_user=guest
+          - r_pass=guest  
+          - driver_type=remote
+          - driver_domain_name=selenium-driver
+        networks:
+            scraper_network:
+                ipv4_address: "169.254.170.6"
+        
+    data-scraper.publisher:
+        image: data-scraper.publisher
+        restart: always 
+        environment:
+          - rabbitmq=rabbitmq
+          - r_user=guest
+          - r_pass=guest  
+        networks:
+            scraper_network:
+                ipv4_address: "169.254.170.7"
+    
+    scraped-data-processor:
+        image: scraped-data-processor
+        restart: always 
+        environment:
+          - rabbitmq=rabbitmq
+          - r_user=guest
+          - r_pass=guest  
+        networks:
+            scraper_network:
+                ipv4_address: "169.254.170.8"
+
+    data-scraper.admin-api:
+        image: data-scraper.admin-api 
+        restart: always 
+        ports:
+          - 80:80
+          - 5000:5000
+          - 5001:5001
+        networks:
+            scraper_network:
+                ipv4_address: "169.254.170.9"

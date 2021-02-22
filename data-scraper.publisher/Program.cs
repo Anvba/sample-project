@@ -3,6 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using MassTransit;
 using DataScraper.Model;
+using Publisher.Model;
+using DataScraper.DataAccess;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 
 namespace data_scraper.publisher
 {
@@ -25,16 +31,33 @@ namespace data_scraper.publisher
                 });
 			});
 
+			var serviceCollection = new ServiceCollection();
+
+			serviceCollection.AddSingleton<IMongoDBConfig>(new MongoDBConfig
+			{
+				ConnectionString = "mongodb://mongo1:27017,mongo2:27017,mongo3:27017/datascraper?replicaSet=rs0",
+				DatabaseName = "datascraper",
+				CollectionName = "scraperDataModel"
+			});
+			serviceCollection.AddLogging(configure => configure.AddConsole());
+			serviceCollection.AddSingleton<IMongoDBRepository<WebResourceModel>, MongoDBRepository<WebResourceModel>>();
+
+    		var serviceProvider = serviceCollection.BuildServiceProvider();
+
 			var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
 			await busControl.StartAsync(source.Token);
+
 			try
 			{
-				while (true)
+				var enumerator = serviceProvider.GetService<IMongoDBRepository<WebResourceModel>>().Watch();
+				while(enumerator.MoveNext())
 				{
-					await busControl.Publish<ScraperDataModel>(new ScraperDataModel());
-					await Task.Delay(TimeSpan.FromSeconds(300));
-				}
+    				foreach(var doc in enumerator.Current)
+					{
+						await busControl.Publish<ScraperDataModel>((ScraperDataModel)doc.FullDocument);
+					};
+				} 	
 			}
 			catch(Exception exc)
 			{

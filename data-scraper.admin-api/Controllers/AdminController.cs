@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DataScraper.Model;
-using DataScraper.AdminAPI.DataAccess;
+using DataScraper.DataAccess;
 using DataAccess.AdminAPI.Model;
 
 namespace data_scraper.admin_api.Controllers

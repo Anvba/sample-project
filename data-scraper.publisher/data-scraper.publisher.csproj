@@ -8,10 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\data-scraper.lib\data-scraper.lib.csproj" />
+    <ProjectReference Include="..\data-scraper.common\data-scraper.common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
-using DataAccess.AdminAPI.Model;
 using DataScraper.Model;
 
-namespace DataScraper.AdminAPI.DataAccess
+namespace DataScraper.DataAccess
 {
 	public class ScraperModelDataService<TModel> : IScraperModelDataService<TModel> where TModel: ScraperDataModel
 	{

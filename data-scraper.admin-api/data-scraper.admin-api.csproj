@@ -5,10 +5,6 @@
     <ProjectReference Include="..\data-scraper.common\data-scraper.common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.11.6" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>data_scraper.admin_api</RootNamespace>

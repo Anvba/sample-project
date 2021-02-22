@@ -1,12 +1,11 @@
-using DataAccess.AdminAPI.Model;
 using DataScraper.Model;
 
-namespace DataScraper.AdminAPI.DataAccess
+namespace DataScraper.DataAccess
 {
 	public interface IScraperModelDataService<TModel> where TModel: ScraperDataModel
 	{
-		public TModel Find(string id);
+		TModel Find(string id);
 
-		public void Create(TModel webResourceModel);
+		void Create(TModel webResourceModel);
 	}
 }

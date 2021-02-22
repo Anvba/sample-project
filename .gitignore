@@ -2,3 +2,4 @@
 /**/obj/**
 /**/*.swp
 /infrastructure/mongo-volume/
+/infrastructure/data/

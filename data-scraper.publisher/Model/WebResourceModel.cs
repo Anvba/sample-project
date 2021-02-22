@@ -1,9 +1,9 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using DataScraper.Model;
-using DataScraper.DataAccess;
+using DataScraper.DataAccess; 
 
-namespace DataAccess.AdminAPI.Model
+namespace Publisher.Model
 {
 	public class WebResourceModel : ScraperDataModel, IDocument
 	{

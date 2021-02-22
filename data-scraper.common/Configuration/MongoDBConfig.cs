@@ -1,6 +1,6 @@
 using System;
 
-namespace DataScraper.AdminAPI.DataAccess
+namespace DataScraper.DataAccess
 {
 	public class MongoDBConfig : IMongoDBConfig
 	{
