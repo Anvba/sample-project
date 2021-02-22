@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace data_scraper.public_api
+namespace DataScraper.PublicApi
 {
     public class Program
     {

@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using DataScraper.Model;
+using DataScraper.DataAccess;
+using DataScraper.PublicApi.Model;
 
 namespace data_scraper.admin_api.Controllers
 {
@@ -14,27 +12,20 @@ namespace data_scraper.admin_api.Controllers
     {
         private readonly ILogger<UserController> _logger;
 
-        public UserController(ILogger<UserController> logger)
+		private readonly IGameDataModelService<GameDataModel> _gameDataModelService;
+
+        public UserController(IGameDataModelService<GameDataModel> gameDataModelService, 
+							  ILogger<UserController> logger)
         {
             _logger = logger;
+			_gameDataModelService = gameDataModelService;
         }
 
-        [HttpGet]
-        public IEnumerable<GameData> Get()
+        [HttpGet("{id}")]
+        public GameDataModel Get(string id)
         {
-			return new[]
-			{
-				new GameData
-				{
-					GameCountry = "Test GameCountry",
-				 	GameLeague = "Test GameLeague",
-					GameDate = "Test GameDate",
-					GameTime = "Test GameTime",
-					FirstTeam = "Test FirstTeam",
-					SecondTeam = "Test SecondTeam",
-					GameScore = "Test GameScore"
-				}
-			};
+				_logger.LogInformation("Get document: {0}", id);
+				return _gameDataModelService.Find(id);
         }
     }
 }

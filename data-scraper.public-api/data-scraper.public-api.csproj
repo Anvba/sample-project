@@ -2,11 +2,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\data-scraper.lib\data-scraper.lib.csproj" />
+    <ProjectReference Include="..\data-scraper.common\data-scraper.common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>data_scraper.public_api</RootNamespace>
+    <RootNamespace>DataScraper.PublicApi</RootNamespace>
   </PropertyGroup>
 
 

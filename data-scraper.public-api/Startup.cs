@@ -10,8 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using DataScraper.DataAccess;
+using Microsoft.Extensions.Options;
+using DataScraper.PublicApi.Model;
 
-namespace data_scraper.public_api
+namespace DataScraper.PublicApi
 {
     public class Startup
     {
@@ -26,6 +29,13 @@ namespace data_scraper.public_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+			services.Configure<MongoDBConfig>(Configuration.GetSection(nameof(MongoDBConfig)));
+
+    		services.AddSingleton<IMongoDBConfig>(sp => sp.GetRequiredService<IOptions<MongoDBConfig>>().Value);
+        
+			services.AddSingleton<IMongoDBRepository<GameDataModel>, MongoDBRepository<GameDataModel>>();
+			services.AddScoped<IGameDataModelService<GameDataModel>, GameDataModelService<GameDataModel>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,7 +46,7 @@ namespace data_scraper.public_api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+//            app.UseHttpsRedirection();
 
             app.UseRouting();
 

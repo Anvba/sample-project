@@ -96,8 +96,8 @@ services:
             scraper_network:
                 ipv4_address: "169.254.170.7"
     
-    scraped-data-processor:
-        image: scraped-data-processor
+    data-scraper.processor:
+        image: data-scraper.processor
         restart: always 
         environment:
           - rabbitmq=rabbitmq
@@ -117,3 +117,14 @@ services:
         networks:
             scraper_network:
                 ipv4_address: "169.254.170.9"
+
+    data-scraper.public-api:
+        image: data-scraper.public-api 
+        restart: always 
+        ports:
+          - 88:80
+          - 5050:5000
+          - 5051:5001
+        networks:
+            scraper_network:
+                ipv4_address: "169.254.170.11"
